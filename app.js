@@ -14,6 +14,14 @@ mongoose.connect(DB_URI);
 mongoose.connection.on("connected", () => console.log("MongoDB Connected"));
 mongoose.connection.on("error", (err) => console.log("MongoDB Error", err));
 
+
+const corsOptions = {
+    origin: 'https://sore-puce-sturgeon-sock.cyclic.app/',
+    optionsSuccessStatus: 200 
+};
+// Enable CORS
+app.use(cors(corsOptions));
+
 app.get("/gettodo", async (req, res) => {
     let todos = await TodoModel.find({});
     res.send(todos);
