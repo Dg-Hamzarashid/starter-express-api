@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose  from 'mongoose'
 import TodoModel from './models/TodoScheme.js'
+import cors from 'cors';
 
 const app = express();
 const port = 5000;
@@ -17,7 +18,7 @@ mongoose.connection.on("error", (err) => console.log("MongoDB Error", err));
 
 const corsOptions = {
     origin: 'https://sore-puce-sturgeon-sock.cyclic.app/',
-    optionsSuccessStatus: 200 
+    optionsSuccessStatus: 200
 };
 // Enable CORS
 app.use(cors(corsOptions));
