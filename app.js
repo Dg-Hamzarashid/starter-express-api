@@ -14,16 +14,28 @@ mongoose.connect(DB_URI);
 mongoose.connection.on("connected", () => console.log("MongoDB Connected"));
 mongoose.connection.on("error", (err) => console.log("MongoDB Error", err));
 
-app.get("/", async  (req, res) => {
-    console.log("Hello World");
+app.get("/gettodo", async (req, res) => {
+    let todos = await TodoModel.find({});
+    res.send(todos);
+})
+
+
+app.post("/create-todo", async  (req, res) => {
     try {
+        const {todo} = req.body;
+        if (!todo) {
+            res.json({
+                message: 'Todo is Required',
+                status: false,
+            });
+        }
         const userSave = await TodoModel.create({
-            todo:'hello',
+            todo: todo,
             created_by:1
         });
         res.json({
             message: 'Successfully Added',
-            status: false,
+            status: true,
             data: null,
           });
     } catch (error) {
@@ -33,13 +45,73 @@ app.get("/", async  (req, res) => {
           data: null,
         });
     }
-    // res.send();
+})
+
+app.get("/edittodo/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userRecords = await TodoModel.findById(id);
+        res.json({
+            message: 'Successfully getting data',
+            status: true,
+            data: userRecords,
+          });
+    } catch (error) {
+        res.json({
+          message: error.message,
+          status: false,
+          data: null,
+        });
+    }
 })
 
 
-app.post("/create-todo", (req, res) => {
-    console.log("Hello World");
+app.delete("/deletetodo/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userRecords = await TodoModel.findByIdAndDelete(id);
+        res.json({
+            message: 'Successfully Deleted',
+            status: true,
+            data: null,
+          });
+    } catch (error) {
+        res.json({
+          message: error.message,
+          status: false,
+          data: null,
+        });
+    }
 })
+
+app.put("/updatetodo/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {todo} = req.body;
+
+        if (!id || !todo) {
+            res.json({
+            message: 'Required Parameter Not Found',
+            status: false,
+            });
+        }
+        const Todomodel = await TodoModel.findByIdAndUpdate(id, {
+            todo
+        });
+        res.json({
+            message: 'Successfully Updated',
+            status: true,
+            data: null,
+          });
+    } catch (error) {
+        res.json({
+          message: error.message,
+          status: false,
+          data: null,
+        });
+    }
+})
+
 
 
 
