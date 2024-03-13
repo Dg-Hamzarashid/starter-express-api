@@ -22,6 +22,10 @@ app.get("/gettodo", async (req, res) => {
     res.send(todos);
 })
 
+app.get("/testtodo", async (req, res) => {
+    res.send({testing});
+})
+
 
 app.post("/create-todo", async  (req, res) => {
     try {
