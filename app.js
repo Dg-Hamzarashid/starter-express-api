@@ -5,7 +5,7 @@ import cors from 'cors';
 
 const app = express();
 const port = 5000;
-
+app.use(cors()); // Enable CORS
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
@@ -16,12 +16,6 @@ mongoose.connection.on("connected", () => console.log("MongoDB Connected"));
 mongoose.connection.on("error", (err) => console.log("MongoDB Error", err));
 
 
-const corsOptions = {
-    origin: 'https://sore-puce-sturgeon-sock.cyclic.app/',
-    optionsSuccessStatus: 200
-};
-// Enable CORS
-app.use(cors(corsOptions));
 
 app.get("/gettodo", async (req, res) => {
     let todos = await TodoModel.find({});
